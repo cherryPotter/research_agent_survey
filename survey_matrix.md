@@ -13,21 +13,22 @@ To cover the visual side of scientific communication, I split the original `Scie
 | Long-horizon Research Agent | [OpenResearcher](https://github.com/GAIR-NLP/OpenResearcher) | [AI co-scientist](https://research.google/blog/accelerating-scientific-breakthroughs-with-an-ai-co-scientist/) | [SciDER](https://arxiv.org/abs/2603.01421) |  | [PaperBench](https://arxiv.org/abs/2504.01848), [ScienceAgentBench](https://github.com/OSU-NLP-Group/ScienceAgentBench), [CORE-Bench](https://arxiv.org/abs/2409.11363) |  | [PaperBanana](https://arxiv.org/abs/2601.23265), [FigAgent](https://www.researchgate.net/publication/400780235_FigAgent_Towards_Automatic_Method_Illustration_Figure_Generation_for_AI_Scientific_Papers) |  |
 | Closed-loop / Autonomous Research |  | [The AI Scientist](https://arxiv.org/abs/2408.06292), [The AI Scientist-v2](https://arxiv.org/abs/2504.08066) | [autoresearch](https://github.com/karpathy/autoresearch) |  |  |  | [Nano Banana 2](https://aistudio.google.com/models/gemini-2-5-flash-image) | [FARS](https://analemma.ai/fars), [The AI Scientist](https://sakana.ai/ai-scientist/), [The AI Scientist-v2](https://github.com/SakanaAI/AI-Scientist-v2) |
 
-## Notes on placement
 
-### Why add a separate figure / visual communication column?
-Recent systems explicitly target scientific **figures**, **posters**, and **image editing / rendering** rather than pure text generation. Keeping them inside a generic “Scientific Communication” bucket hides an important emerging sub-area.
+- [SciAgentGym: Benchmarking Multi-Step Scientific Tool-use in LLM Agents](https://arxiv.org/pdf/2602.12984v1)
+SciAgentGym，里面集成了 1,780 个带类型签名的领域工具，覆盖 物理、化学、生命科学、材料科学 四个方向；然后基于这个环境做了 SciAgentBench，包含 259 个任务、1,134 个子问题，并且分成从简单动作到长程工作流的多级难度。
 
-### What counts as “figure / visual communication” here?
-- **General-purpose image generation / editing useful for research visuals:** `Nano Banana 2`
-- **Scientific figure generation:** `FigGen`, `FigAgent`, `SciFig`, `AutoFigure`
-- **Academic illustration / method diagram agents:** `PaperBanana`
-- **Poster generation:** `Paper2Poster`
+即使是领先模型，随着交互步数增加，成功率也会明显下降；文中给的例子是 GPT-5 从 60.6% 掉到 30.9%，整体成功率也只有 41.3%。这说明现在真正卡住 scientific agents 的，往往不是“不会做一步推理”，而是不会跑完整条 workflow
 
-### Why keep `scitex-python` under Cross-Task / End-to-End?
-`scitex-python` is best placed in `Workflow-level Orchestration x Cross-Task / End-to-End` because its main contribution is modular tooling and full-pipeline orchestration rather than autonomy in a single research subtask.
+- [S1-NexusAgent](https://arxiv.org/abs/2602.01550): 把“长程科研 agent”做成一个可自我演化的系统
 
-### Optional systems you may also want to mention in the surrounding survey text
-- [IDRBench](https://www.researchgate.net/publication/399707921_IDRBench_Interactive_Deep_Research_Benchmark) for **interactive** deep research evaluation.
-- [Benchmarking LLMs in Scientific Discovery via Inspiration Retrieval, Hypothesis Composition, and Hypothesis Ranking](https://arxiv.org/abs/2503.21248) for a more fine-grained look at **hypothesis-generation** evaluation.
-- [Agentic AutoSurvey](https://arxiv.org/abs/2509.18661) and [AutoSurvey2](https://arxiv.org/abs/2510.26012) as follow-up systems if you want the survey-writing thread to extend beyond the original `AutoSurvey`.
+multidisciplinary scientific research 里最难的几个问题：
+长程规划、工具编排、长上下文管理、以及执行后如何从轨迹里持续学习。论文里最核心的设计是一个 hierarchical Plan-and-CodeAct 范式，把“全局科研规划”和“局部子任务工具执行”分成双层循环；系统还原生支持 MCP，并且可以接入成千上万的跨学科工具。
+
+不是只做 benchmark，这篇最值得拆开的三块是：
+
+hierarchical planning：全局研究计划和局部执行分层；
+context/object management：不是把所有中间结果都塞回 prompt；
+trajectory-to-skill distillation：把成功轨迹变成下次可直接调用的技能。
+
+- [Scaling Reproducibility](https://arxiv.org/abs/2602.16733)
+人类先固定诊断模板，AI 只负责获取材料、解析规格、重建环境、执行代码、生成标准化报告
